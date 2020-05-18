@@ -20,9 +20,9 @@ export class AppComponent implements OnInit {
         'https://angular-maxi-http.firebaseio.com/posts.json',
         postData
       )
-      // .subscribe(responseData => {
-      //   console.log(responseData);
-      // });
+      .subscribe(responseData => {
+        console.log(responseData);
+      });
   }
 
   onFetchPosts() {
