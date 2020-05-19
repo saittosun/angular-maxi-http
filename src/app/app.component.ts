@@ -25,12 +25,10 @@ export class AppComponent implements OnInit {
   }
 
   onCreatePost(postData: Post) {
-    // Send Http request
-    this.postsService.createAndStorePosts(postData.title, postData.content);
+    this.postsService.onCreateAndStorePosts(postData.title, postData.content);
   }
 
   onFetchPosts() {
-    // Send Http request
     this.isFetching = true;
     this.postsService.onFetchPosts().subscribe(posts => {
       this.isFetching = false;
@@ -39,7 +37,11 @@ export class AppComponent implements OnInit {
   }
 
   onClearPosts() {
-    // Send Http request
+    // tslint:disable-next-line:max-line-length
+    // why do I want to subscribe here? Well if I deleted all posts, I also want to clear my loaded posts array here in the component. So I will add a method here where I don't really care about the result of our request or of the response but I know that this function here will only run if it succeeded and therefore here, I will then simply just set this loaded post equal to an empty array again to reset it and with these changes to the service and to the component,
+    this.postsService.onDeletePosts().subscribe(() => {
+      this.loadedPosts = [];
+    })
   }
 
 

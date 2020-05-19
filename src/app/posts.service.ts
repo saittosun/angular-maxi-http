@@ -11,7 +11,7 @@ export class PostsService {
 
   constructor(private http: HttpClient) { }
 
-  createAndStorePosts(title: string, content: string) {
+  onCreateAndStorePosts(title: string, content: string) {
     const postData: Post = {title, content};
     this.http
     .post<{name: string}>(
@@ -44,5 +44,11 @@ export class PostsService {
         }
         return postsArray;
       }));
+  }
+
+  onDeletePosts() {
+    // tslint:disable-next-line:max-line-length
+    // if I want to be informed about that deletion process in the component, I will return my observable here and I will not subscribe here in the service but instead now in the app component, in onClearPosts, I can reach out to the post service and call delete posts and since this returns an observable, we now have to subscribe here.
+    return this.http.delete('https://angular-maxi-http.firebaseio.com/posts.json');
   }
 }
