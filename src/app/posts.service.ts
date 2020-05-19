@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 import { Post } from './post.model';
-import { Subject } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +37,9 @@ export class PostsService {
       // between the angled brackets, you store the type which this response will actually return as a body once it's done. So it's the response body type which is stored here and that will then automatically be handled by the Angular HttpClient and TypeScript understands this and now knows that the response data will have this type format as you can tell and this is also available on post requests, it's available on all requests, you can use these angled brackets to add this extra piece of information which is totally optional but recommended and helpful about the data you're getting back. yukarida post request te yaptik. name dememizin sebebi tekrar request yaptigimizda console da gorduk 'name' property
       .get<{[key: string]: Post}>('https://angular-maxi-http.firebaseio.com/posts.json')
       // tslint:disable-next-line:max-line-length
-      .pipe(map(responseData => {// that should now return the converted response data and here the idea is that we return an array of posts instead of an object with that cryptic key which then holds our actual post. Now to convert a Javascript object which we have here to an array, we have to manually loop through all the keys and create a new array.
+      .pipe(
+        // tslint:disable-next-line:max-line-length
+        map(responseData => {// that should now return the converted response data and here the idea is that we return an array of posts instead of an object with that cryptic key which then holds our actual post. Now to convert a Javascript object which we have here to an array, we have to manually loop through all the keys and create a new array.
         const postsArray: Post[] = [];
         for (const key in responseData) {
           // tslint:disable-next-line:max-line-length
@@ -49,7 +51,14 @@ export class PostsService {
           }
         }
         return postsArray;
-      }));
+      }),
+      catchError(errorRes => {
+        // send to analytics server
+        // tslint:disable-next-line:max-line-length
+        // this of course doesn't do anything useful here but it's just an idea that you could consider using catch error if you have some generic error handling task you also want to execute.
+        return throwError(errorRes);
+      })
+    );
   }
 
   onDeletePosts() {
