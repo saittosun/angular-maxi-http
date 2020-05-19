@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Post } from './post.model';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit {
     this.fetchPosts();
   }
 
-  onCreatePost(postData: { title: string; content: string }) {
+  onCreatePost(postData: Post) {
     // Send Http request
     this.http
       .post(
@@ -43,8 +44,8 @@ export class AppComponent implements OnInit {
     this.http
       .get('https://angular-maxi-http.firebaseio.com/posts.json')
       // tslint:disable-next-line:max-line-length
-      .pipe(map(responseData => {// that should now return the converted response data and here the idea is that we return an array of posts instead of an object with that cryptic key which then holds our actual post. Now to convert a Javascript object which we have here to an array, we have to manually loop through all the keys and create a new array.
-        const postsArray = [];
+      .pipe(map((responseData: {[key: string]: Post}) => {// that should now return the converted response data and here the idea is that we return an array of posts instead of an object with that cryptic key which then holds our actual post. Now to convert a Javascript object which we have here to an array, we have to manually loop through all the keys and create a new array.
+        const postsArray: Post[] = [];
         for (const key in responseData) {
           // tslint:disable-next-line:max-line-length
           // if you're using a for/in loop where you check if response data has key as its own property so that you're not trying to access the property of some prototype
