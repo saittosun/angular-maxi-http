@@ -10,6 +10,7 @@ import { Post } from './post.model';
 })
 export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
+  isFetching = false;
 
   constructor(private http: HttpClient) {}
 
@@ -41,6 +42,7 @@ export class AppComponent implements OnInit {
   // tslint:disable-next-line:max-line-length
   // pipe as you learned is a method that allows you to funnel your observable data through multiple operators before they reach the subscribe method. The map operator allows us to get some data and return new data which is then automatically re-wrapped into an observable so that we can still subscribe to it, if it would not be wrapped into an observable again, we could not subscribe.
   private fetchPosts() {
+    this.isFetching = true;
     this.http
       // tslint:disable-next-line:max-line-length
       // between the angled brackets, you store the type which this response will actually return as a body once it's done. So it's the response body type which is stored here and that will then automatically be handled by the Angular HttpClient and TypeScript understands this and now knows that the response data will have this type format as you can tell and this is also available on post requests, it's available on all requests, you can use these angled brackets to add this extra piece of information which is totally optional but recommended and helpful about the data you're getting back. yukarida post request te yaptik. name dememizin sebebi tekrar request yaptigimizda console da gorduk 'name' property
@@ -60,6 +62,7 @@ export class AppComponent implements OnInit {
         return postsArray;
       }))
       .subscribe(posts => {
+        this.isFetching = false;
         // console.log(posts);
         this.loadedPosts = posts;
       });
