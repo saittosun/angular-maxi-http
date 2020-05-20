@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 
 import { Post } from './post.model';
@@ -35,7 +35,11 @@ export class PostsService {
     return this.http
       // tslint:disable-next-line:max-line-length
       // between the angled brackets, you store the type which this response will actually return as a body once it's done. So it's the response body type which is stored here and that will then automatically be handled by the Angular HttpClient and TypeScript understands this and now knows that the response data will have this type format as you can tell and this is also available on post requests, it's available on all requests, you can use these angled brackets to add this extra piece of information which is totally optional but recommended and helpful about the data you're getting back. yukarida post request te yaptik. name dememizin sebebi tekrar request yaptigimizda console da gorduk 'name' property
-      .get<{[key: string]: Post}>('https://angular-maxi-http.firebaseio.com/posts.json')
+      .get<{[key: string]: Post}>('https://angular-maxi-http.firebaseio.com/posts.json',
+        {
+          headers: new HttpHeaders({'Custom-Header': 'Hello'})
+        }
+      )
       // tslint:disable-next-line:max-line-length
       .pipe(
         // tslint:disable-next-line:max-line-length
