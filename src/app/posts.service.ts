@@ -48,7 +48,8 @@ export class PostsService {
       .get<{[key: string]: Post}>('https://angular-maxi-http.firebaseio.com/posts.json',
         {
           headers: new HttpHeaders({'Custom-Header': 'Hello'}),
-          params: searchParams
+          params: searchParams,
+          responseType: 'json'
         }
       )
       // tslint:disable-next-line:max-line-length
@@ -83,7 +84,10 @@ export class PostsService {
       .delete(
         'https://angular-maxi-http.firebaseio.com/posts.json',
         {
-          observe: 'events'
+          observe: 'events',
+          // tslint:disable-next-line:max-line-length
+          // The default here is JSON, which means the response data, so the data in the body of your response is JSON and that tells Angular that it should automatically parse it and convert it to a Javascript object. You could however also tell Angular the response side will be text and please keep it as text, don't try to convert it to a Javascript object.It could also be a blob if it is a file for example,the official docs of course are the place where you can learn all about all available response types.
+          responseType: 'text'
         }
       )
       // tslint:disable-next-line:max-line-length
